@@ -1,13 +1,16 @@
 // add javascript here
 let answer = 0;
 let guessCount = 0;
+let range = 0;
 const scores = [];
+let playerName = prompt("Enter your name: ").toLowerCase();
+playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1);
 
 document.getElementById("playBtn").addEventListener("click", play);
 document.getElementById("guessBtn").addEventListener("click", makeGuess);
+document.getElementById("giveUpBtn").addEventListener("click", giveUp);
 
 function play() {
-    let range = 0;
     let levels = document.getElementsByName("level");
     for (let i = 0; i < levels.length; i++) {
         if (levels[i].checked) {
@@ -15,7 +18,7 @@ function play() {
         }
         levels[i].disabled = true;
     }
-    document.getElementById("msg").textContent = "Guess a number 1-" + range;
+    document.getElementById("msg").textContent = "Hello, " + playerName + "! To play, guess a number 1-" + range;
     answer = Math.floor(Math.random()*range) + 1;
     guessCount = 0;
 
@@ -27,21 +30,43 @@ function play() {
 function makeGuess() {
     let guess = parseInt(document.getElementById("guess").value);
     if (isNaN(guess)) {
-        msg.textContent = "Please enter a valid number"
+        msg.textContent = "Stupid " + playerName + ", enter a valid number";
         return;
     }
     guessCount++;
     if (guess == answer) {
-        msg.textContent = "Correct! It took " + guessCount + " tries.";
+        msg.textContent = "Correct! It took " + playerName + " " + guessCount + " tries.";
         updateScore(guessCount);
         resetGame();
     }
     else if (guess < answer) {
-        msg.textContent = "Too low, try again.";
+        if (Math.abs(guess - answer) <= 2) {
+            msg.textContent = playerName + ", you're hot! Too low, try again.";
+        }
+        else if (Math.abs(guess - answer) <= 5) {
+            msg.textContent = playerName + ", you're warm. Too low, try again.";
+        }
+        else {
+            msg.textContent = playerName + ", you're cold. Too low, try again.";
+        }
     }
     else {
-        msg.textContent = "Too high, try again.";
+        if (Math.abs(guess - answer) <= 2) {
+            msg.textContent = playerName + ", you're hot! Too high, try again.";
+        }
+        else if (Math.abs(guess - answer) <= 5) {
+            msg.textContent = playerName + ", you're warm. Too high, try again.";
+        }
+        else {
+            msg.textContent = playerName + ", you're cold. Too high, try again.";
+        }
     }
+}
+
+function giveUp() {
+    updateScore(range);
+    resetGame();
+
 }
 
 function updateScore(score) {
