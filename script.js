@@ -13,17 +13,18 @@ function liveTime() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let month = monthNames[date.getMonth()];
     let day = date.getDate();
-    let suffix = "th";
     if ((day % 10 === 1) && (day !== 11)) {
-        suffix = "st";
+        day = day +"st";
     }
     else if ((day % 10 === 2) && (day !== 12)) {
-        suffix = "nd";
+        day = day + "nd";
     }
     else if ((day % 10 === 3) && (day !== 13)) {
-        suffix = "rd";
+        day = day + "rd";
     }
-    day = day + suffix;
+    else {
+        day = day + "th";
+    }
     let year = date.getFullYear();
     let currentTime = date.toLocaleTimeString();
     document.getElementById("date").textContent = month + " " + day + ", " + year + ". Current time: " + currentTime;
