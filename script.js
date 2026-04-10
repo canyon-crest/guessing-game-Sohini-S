@@ -11,13 +11,13 @@ function liveTime() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let month = monthNames[date.getMonth()];
     let day = date.getDate();
-    if (day == 1) {
+    if ((day % 10 == 1) && (day != 11)) {
         day += "st";
     }
-    else if (day == 2) {
+    else if (day % 10 == 2 && day != 12) {
         day += "nd";
     }
-    else if (day == 3) {
+    else if (day % 10 == 3 && day != 13) {
         day += "rd";
     }
     else {
@@ -27,6 +27,7 @@ function liveTime() {
     let currentTime = date.toLocaleTimeString();
     document.getElementById("date").textContent = month + " " + day + ", " + year + ". Current time: " + currentTime;
 }
+liveTime();
 setInterval(liveTime, 1000);
 
 let playerName = prompt("Enter your name: ").toLowerCase();
