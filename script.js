@@ -2,7 +2,33 @@
 let answer = 0;
 let guessCount = 0;
 let range = 0;
+let startTime = 0;
 const scores = [];
+const roundTimes = [];
+
+function liveTime() {
+    let date = new Date();
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let month = monthNames[date.getMonth()];
+    let day = date.getDate();
+    if (day == 1) {
+        day += "st";
+    }
+    else if (day == 2) {
+        day += "nd";
+    }
+    else if (day == 3) {
+        day += "rd";
+    }
+    else {
+        day += "th";
+    }
+    let year = date.getFullYear();
+    let currentTime = date.toLocaleTimeString();
+    document.getElementById("date").textContent = month + " " + day + ", " + year + ". Current time: " + currentTime;
+}
+setInterval(liveTime, 1000);
+
 let playerName = prompt("Enter your name: ").toLowerCase();
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1);
 
@@ -11,6 +37,7 @@ document.getElementById("guessBtn").addEventListener("click", makeGuess);
 document.getElementById("giveUpBtn").addEventListener("click", giveUp);
 
 function play() {
+    startTime = new Date().getTime();
     let levels = document.getElementsByName("level");
     for (let i = 0; i < levels.length; i++) {
         if (levels[i].checked) {
@@ -86,6 +113,16 @@ function updateScore(score) {
             lb[i].textContent = scores[i];
         }
     }
+
+    let endTime = new Date().getTime();
+    let gameTime = (endTime - startTime)/1000;
+
+    roundTimes.push(gameTime);
+    let fastestTime = Math.min(...roundTimes);
+    document.getElementById("fastest").textContent = "Fastest Game: " +fastestTime.toFixed(2);
+
+    let avgTime = (roundTimes.reduce((sum, time) => sum + time, 0))/roundTimes.length;
+    document.getElementById('avgTime').textContent = "Average Time: " + avgTime.toFixed(2);
 }
 
 function resetGame() {
