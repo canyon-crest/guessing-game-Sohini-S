@@ -3,9 +3,7 @@ let answer = 0;
 let guessCount = 0;
 let range = 0;
 let startTime = 0;
-let winCount = 0;
 const scores = [];
-const winScores = [];
 const roundTimes = [];
 
 function liveTime() {
@@ -13,17 +11,17 @@ function liveTime() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let month = monthNames[date.getMonth()];
     let day = date.getDate();
-    if ((day % 10 === 1) && (day !== 11)) {
-        day = day +"st";
+    if (day == 1) {
+        day += "st";
     }
-    else if ((day % 10 === 2) && (day !== 12)) {
-        day = day + "nd";
+    else if (day == 2) {
+        day += "nd";
     }
-    else if ((day % 10 === 3) && (day !== 13)) {
-        day = day + "rd";
+    else if (day == 3) {
+        day += "rd";
     }
     else {
-        day = day + "th";
+        day += "th";
     }
     let year = date.getFullYear();
     let currentTime = date.toLocaleTimeString();
@@ -65,7 +63,7 @@ function makeGuess() {
     guessCount++;
     if (guess == answer) {
         msg.textContent = "Correct! It took " + playerName + " " + guessCount + " tries.";
-        updateScore(guessCount, true);
+        updateScore(guessCount);
         resetGame();
     }
     else if (guess < answer) {
@@ -93,30 +91,26 @@ function makeGuess() {
 }
 
 function giveUp() {
-    updateScore(range, false);
+    updateScore(range);
     resetGame();
 
 }
 
-function updateScore(score, isWin) {
+function updateScore(score) {
     scores.push(score);
-    if (isWin) {
-        winCount++;
-        winScores.push(score);
-    }
-    wins.textContent = "Total Wins: " + winCount;
+    wins.textContent = "Total Wins: " + scores.length;
     let sum = 0;
-    for (let i = 0; i < winScores.length; i++) {
-        sum += winScores[i];
+    for (let i = 0; i < scores.length; i++) {
+        sum += scores[i];
     }
-    avgScore.textContent = "Average Score: " + (sum/winScores.length).toFixed(1);
+    avgScore.textContent = "Average Score: " + (sum/scores.length).toFixed(1);
 
-    let sortedScores = [...scores].sort(function(a, b) {return a - b;});
+    scores.sort(function(a, b) {return a - b;});
 
     let lb = document.getElementsByName("leaderboard");
     for (let i = 0; i < lb.length; i++) {
-        if (i < sortedScores.length) {
-            lb[i].textContent = sortedScores[i];
+        if (i < scores.length) {
+            lb[i].textContent = scores[i];
         }
     }
 
